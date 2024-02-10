@@ -1,0 +1,28 @@
+{
+  "devDependencies": {
+    "@types/node": "^20.11.17"
+  },
+  "name": "college-project",
+  "version": "1.0.0",
+  "description": "It's a software where the user can rent cars",
+  "main": "app.js",
+  "dependencies": {
+    "undici-types": "^5.26.5"
+  },
+  "scripts": {
+    "test": "\"dev\": \"tsx watch app.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azbito/college-project.git"
+  },
+  "keywords": [
+    "software"
+  ],
+  "author": "Thiago Roque (aka Azbito; Ly)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Azbito/college-project/issues"
+  },
+  "homepage": "https://github.com/Azbito/college-project#readme"
+}
