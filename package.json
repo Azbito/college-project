@@ -1,16 +1,21 @@
 {
   "devDependencies": {
-    "@types/node": "^20.11.17"
+    "@types/keypress": "^2.0.30",
+    "@types/node": "^20.11.17",
+    "@types/readline-sync": "^1.4.8",
+    "tsx": "^4.7.1"
   },
   "name": "college-project",
   "version": "1.0.0",
   "description": "It's a software where the user can rent cars",
-  "main": "app.js",
+  "main": "app.ts",
   "dependencies": {
+    "keypress": "^0.2.1",
+    "readline-sync": "^1.4.10",
     "undici-types": "^5.26.5"
   },
   "scripts": {
-    "test": "\"dev\": \"tsx watch app.js\""
+    "dev": "tsx app.ts"
   },
   "repository": {
     "type": "git",

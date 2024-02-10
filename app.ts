@@ -1,17 +1,53 @@
 import { DateTime, Brand, Model, Vehicle, Client } from './models'
+import * as readline from 'readline'
 
 function prompt(question: string): Promise<string> {
-  const readline = require('readline').createInterface({
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   })
 
   return new Promise<string>(resolve => {
-    readline.question(question, (answer: string) => {
+    rl.question(question, (answer: string) => {
       resolve(answer)
-      readline.close()
+      rl.close()
     })
   })
+}
+
+function pressEscToQuit(): void {
+  console.log('Press ESC to quit')
+
+  process.stdin.setRawMode(true)
+  process.stdin.resume()
+  process.stdin.setEncoding('utf8')
+
+  process.stdin.on('data', (key: string) => {
+    if (key === '\u001b') {
+      console.log('Exiting...')
+      process.exit(0)
+    }
+  })
+}
+
+function calculateReturnDate(rentalDate: DateTime): DateTime {
+  const returnDate = new Date(rentalDate.date)
+  returnDate.setDate(returnDate.getDate() + 7)
+
+  const year = returnDate.getFullYear().toString()
+  let month = (returnDate.getMonth() + 1).toString().padStart(2, '0')
+  let day = returnDate.getDate().toString().padStart(2, '0')
+
+  return { date: `${year}-${month}-${day}`, time: '00:00' }
+}
+
+function getTodayDate(): DateTime {
+  const today = new Date()
+  const year = today.getFullYear().toString()
+  let month = (today.getMonth() + 1).toString().padStart(2, '0')
+  let day = today.getDate().toString().padStart(2, '0')
+
+  return { date: `${year}-${month}-${day}`, time: '00:00' }
 }
 
 async function promptNumber(question: string): Promise<number> {
@@ -24,26 +60,6 @@ async function promptNumber(question: string): Promise<number> {
       console.log('Write a valid number')
     }
   }
-}
-
-function getTodayDate(): DateTime {
-  const today = new Date()
-  const year = today.getFullYear().toString()
-  let month = (today.getMonth() + 1).toString().padStart(2, '0')
-  let day = today.getDate().toString().padStart(2, '0')
-
-  return { date: `${year}-${month}-${day}`, time: '00:00' }
-}
-
-function calculateReturnDate(rentalDate: DateTime): DateTime {
-  const returnDate = new Date(rentalDate.date)
-  returnDate.setDate(returnDate.getDate() + 7)
-
-  const year = returnDate.getFullYear().toString()
-  let month = (returnDate.getMonth() + 1).toString().padStart(2, '0')
-  let day = returnDate.getDate().toString().padStart(2, '0')
-
-  return { date: `${year}-${month}-${day}`, time: '00:00' }
 }
 
 async function main() {
@@ -112,6 +128,8 @@ async function main() {
 
   console.log('\nExpected Return Date:')
   console.log(`Date: ${returnDate.date} ${returnDate.time}`)
+
+  pressEscToQuit()
 }
 
 main()

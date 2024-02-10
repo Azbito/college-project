@@ -25,8 +25,8 @@ var Brand = /** @class */ (function () {
 }());
 exports.Brand = Brand;
 var Vehicle = /** @class */ (function () {
-    function Vehicle(plateNumber, color, year, fuelType, numberOfDoors, mileage, RENAVAM, chassis, rentalValue, model) {
-        this.plateNumber = plateNumber;
+    function Vehicle(plateID, color, year, fuelType, numberOfDoors, mileage, RENAVAM, chassis, rentalValue, model) {
+        this.plateID = plateID;
         this.color = color;
         this.year = year;
         this.fuelType = fuelType;

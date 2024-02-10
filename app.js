@@ -37,17 +37,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var models_1 = require("./models");
+var readline = require("readline");
 function prompt(question) {
-    var readline = require('readline').createInterface({
+    var rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
     return new Promise(function (resolve) {
-        readline.question(question, function (answer) {
+        rl.question(question, function (answer) {
             resolve(answer);
-            readline.close();
+            rl.close();
         });
     });
+}
+function pressEscToQuit() {
+    console.log('Press ESC to quit');
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('data', function (key) {
+        if (key === '\u001b') {
+            console.log('Exiting...');
+            process.exit(0);
+        }
+    });
+}
+function calculateReturnDate(rentalDate) {
+    var returnDate = new Date(rentalDate.date);
+    returnDate.setDate(returnDate.getDate() + 7);
+    var year = returnDate.getFullYear().toString();
+    var month = (returnDate.getMonth() + 1).toString().padStart(2, '0');
+    var day = returnDate.getDate().toString().padStart(2, '0');
+    return { date: "".concat(year, "-").concat(month, "-").concat(day), time: '00:00' };
+}
+function getTodayDate() {
+    var today = new Date();
+    var year = today.getFullYear().toString();
+    var month = (today.getMonth() + 1).toString().padStart(2, '0');
+    var day = today.getDate().toString().padStart(2, '0');
+    return { date: "".concat(year, "-").concat(month, "-").concat(day), time: '00:00' };
 }
 function promptNumber(question) {
     return __awaiter(this, void 0, void 0, function () {
@@ -72,24 +100,9 @@ function promptNumber(question) {
         });
     });
 }
-function getTodayDate() {
-    var today = new Date();
-    var year = today.getFullYear().toString();
-    var month = (today.getMonth() + 1).toString().padStart(2, '0');
-    var day = today.getDate().toString().padStart(2, '0');
-    return { date: "".concat(year, "-").concat(month, "-").concat(day), time: '00:00' };
-}
-function calculateReturnDate(rentalDate) {
-    var returnDate = new Date(rentalDate.date);
-    returnDate.setDate(returnDate.getDate() + 7);
-    var year = returnDate.getFullYear().toString();
-    var month = (returnDate.getMonth() + 1).toString().padStart(2, '0');
-    var day = returnDate.getDate().toString().padStart(2, '0');
-    return { date: "".concat(year, "-").concat(month, "-").concat(day), time: '00:00' };
-}
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var clientName, clientEmail, clientPhoneNumber, client, brandName, brand, modelName, model, vehiclePlateNumber, vehicleColor, vehicleYear, vehicleFuelType, vehicleNumberOfDoors, vehicleMileage, vehicleRENAVAM, vehicleChassis, vehicleRentalValue, vehicle, rentalDate, returnDate;
+        var clientName, clientEmail, clientPhoneNumber, client, brandName, brand, modelName, model, vehiclePlateID, vehicleColor, vehicleYear, vehicleFuelType, vehicleNumberOfDoors, vehicleMileage, vehicleRENAVAM, vehicleChassis, vehicleRentalValue, vehicle, rentalDate, returnDate;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -112,9 +125,9 @@ function main() {
                 case 5:
                     modelName = _a.sent();
                     model = new models_1.Model(modelName, brand);
-                    return [4 /*yield*/, prompt('Enter vehicle plate number: ')];
+                    return [4 /*yield*/, prompt('Enter vehicle plate ID: ')];
                 case 6:
-                    vehiclePlateNumber = _a.sent();
+                    vehiclePlateID = _a.sent();
                     return [4 /*yield*/, prompt('Enter vehicle color: ')];
                 case 7:
                     vehicleColor = _a.sent();
@@ -139,7 +152,7 @@ function main() {
                     return [4 /*yield*/, promptNumber('Enter vehicle rental value: ')];
                 case 14:
                     vehicleRentalValue = _a.sent();
-                    vehicle = new models_1.Vehicle(vehiclePlateNumber, vehicleColor, vehicleYear, vehicleFuelType, vehicleNumberOfDoors, vehicleMileage, vehicleRENAVAM, vehicleChassis, vehicleRentalValue, model);
+                    vehicle = new models_1.Vehicle(vehiclePlateID, vehicleColor, vehicleYear, vehicleFuelType, vehicleNumberOfDoors, vehicleMileage, vehicleRENAVAM, vehicleChassis, vehicleRentalValue, model);
                     rentalDate = getTodayDate();
                     returnDate = calculateReturnDate(rentalDate);
                     client.rentVehicle(vehicle, rentalDate);
@@ -149,7 +162,7 @@ function main() {
                     console.log("Email: ".concat(client.email));
                     console.log("Phone Number: ".concat(client.phoneNumber));
                     console.log('\nRented Vehicle Details:');
-                    console.log("Plate Number: ".concat(vehicle.plateNumber));
+                    console.log("Plate ID: ".concat(vehicle.plateID));
                     console.log("Brand: ".concat(vehicle.model.brand.name));
                     console.log("Model: ".concat(vehicle.model.name));
                     console.log("Color: ".concat(vehicle.color));
@@ -163,6 +176,7 @@ function main() {
                     console.log("Rental Date: ".concat(rentalDate.date, " ").concat(rentalDate.time));
                     console.log('\nExpected Return Date:');
                     console.log("Date: ".concat(returnDate.date, " ").concat(returnDate.time));
+                    pressEscToQuit();
                     return [2 /*return*/];
             }
         });
